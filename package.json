@@ -1,0 +1,27 @@
+{
+  "name": "MMM-Volume",
+  "version": "0.0.1",
+  "rev": "develop",
+  "description": "An embedded volume notification displayer on MagicMirror.",
+  "main": "MMM-Volume.js",
+  "scripts": {
+    "preinstall": "installer/preinstall.sh",
+    "postinstall": "installer/postinstall.sh"
+  },
+  "keywords": [
+    "magic mirror",
+    "module",
+    "volume",
+    "warning"
+  ],
+  "author": "bugsounet",
+  "license": "MIT",
+  "bugs": {
+    "url": "http://forum.bugsounet.fr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bugsounet/MMM-Volume"
+  },
+  "homepage": "http://wiki.bugsounet.fr/en/MMM-Volume"
+}
