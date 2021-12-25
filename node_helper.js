@@ -21,7 +21,7 @@ module.exports = NodeHelper.create({
   socketNotificationReceived: function (noti, payload) {
     switch (noti) {
       case "INIT":
-        console.log("[NOTI] MMM-Volume Version:", require('./package.json').version, "rev:", require('./package.json').rev)
+        console.log("[VOLUME] EXT-Volume Version:", require('./package.json').version, "rev:", require('./package.json').rev)
         this.initialize(payload)
       break
       case "VOLUME_SET":

@@ -1,13 +1,13 @@
 /**
- ** Module : MMM-Volume
+ ** Module : EXT-Volume
  ** @bugsounet
- ** ©12-2021
+ ** ©01-2022
  ** support: http://forum.bugsounet.fr
  **/
 
 logNOTI = (...args) => { /* do nothing */ }
 
-Module.register("MMM-Volume", {
+Module.register("EXT-Volume", {
   defaults: {
     debug: true,
     volumePreset: "PULSE",
@@ -25,7 +25,7 @@ Module.register("MMM-Volume", {
 
   getStyles: function () {
     return [
-      "MMM-Volume.css",
+      "EXT-Volume.css",
       "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     ]
   },
@@ -51,8 +51,7 @@ Module.register("MMM-Volume", {
       case "VOLUME_DONE":
         this.drawVolume(payload)
         break
-   
-    }    
+    }
   },
 
   /****************************/
