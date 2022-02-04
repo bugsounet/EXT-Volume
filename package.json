@@ -1,7 +1,7 @@
 {
   "name": "EXT-Volume",
-  "version": "0.0.1",
-  "rev": "develop",
+  "version": "1.0.0",
+  "rev": "220205",
   "description": "An embedded volume notification displayer on MagicMirror.",
   "main": "EXT-Volume.js",
   "scripts": {
@@ -12,16 +12,17 @@
     "magic mirror",
     "module",
     "volume",
-    "warning"
+    "warning",
+    "GoogleAssistant"
   ],
   "author": "bugsounet",
   "license": "MIT",
   "bugs": {
-    "url": "http://forum.bugsounet.fr"
+    "url": "https://forum.bugsounet.fr"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/bugsounet/EXT-Volume"
   },
-  "homepage": "http://wiki.bugsounet.fr/en/EXT-Volume"
+  "homepage": "https://wiki.bugsounet.fr/en/EXT-Volume"
 }

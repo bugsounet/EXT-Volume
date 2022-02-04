@@ -16,6 +16,7 @@ module.exports = NodeHelper.create({
       "RESPEAKER_SPEAKER": "amixer -M sset Speaker #VOLUME#%",
       "RESPEAKER_PLAYBACK": "amixer -M sset Playback #VOLUME#%"
     }
+    this.volumeDisabled = true
   },
 
   socketNotificationReceived: function (noti, payload) {
@@ -38,26 +39,27 @@ module.exports = NodeHelper.create({
       return data !== null && data !== undefined
     }
     if (!exists(this.volumeScript[this.config.volumePreset])) {
-      console.log("[VOLUME] VolumePresetError")
-      return //this.DisplayError("VolumePreset error", {message: "VolumePresetError"})
+      console.error("[VOLUME] VolumePresetError")
+      this.sendSocketNotification("WARNING", "VolumePresetError")
+      return
     }
+    this.volumeDisabled= false
   },
 
   /** Volume control **/
   setVolume: function(level) {
+    if (this.volumeDisabled) return this.sendSocketNotification("WARNING" , "VolumeDisabled")
     var volumeScript= this.config.myScript ? this.config.myScript : this.volumeScript[this.config.volumePreset]
     var script = volumeScript.replace("#VOLUME#", level)
     exec (script, (err, stdout, stderr)=> {
       if (err) {
-        console.log("[VOLUME] Set Volume Error:", err.toString())
-        this.sendSocketNotification("WARNING" , { message: "VolumePresetError" })
+        console.error("[VOLUME] Set Volume Error:", err.toString())
+        this.sendSocketNotification("WARNING" , "VolumePresetError")
       }
       else {
         log("Set Volume To:", level)
         this.sendSocketNotification("VOLUME_DONE", level)
-        this.sendSocketNotification("INFORMATION" , { message: "Volume", values: level + "%" })
       }
     })
-  },
-
+  }
 })

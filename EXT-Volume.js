@@ -2,7 +2,7 @@
  ** Module : EXT-Volume
  ** @bugsounet
  ** ©01-2022
- ** support: http://forum.bugsounet.fr
+ ** support: https://forum.bugsounet.fr
  **/
 
 logNOTI = (...args) => { /* do nothing */ }
@@ -16,7 +16,7 @@ Module.register("EXT-Volume", {
 
   start: function () {
     if (this.config.debug) logNOTI = (...args) => { console.log("[VOLUME]", ...args) }
-    this.config.volumeText = "Volume" //this.translate("VolumeText")
+    this.config.volumeText = this.translate("VolumeText")
   },
 
   getScripts: function() {
@@ -39,6 +39,7 @@ Module.register("EXT-Volume", {
       case "DOM_OBJECTS_CREATED":
         this.sendSocketNotification("INIT", this.config)
         this.prepareVolume()
+        this.sendNotification("EXT_HELLO", this.name)
         break
       case "EXT_VOLUME_SET":
         this.sendSocketNotification("VOLUME_SET", payload)
@@ -51,6 +52,8 @@ Module.register("EXT-Volume", {
       case "VOLUME_DONE":
         this.drawVolume(payload)
         break
+      case "WARNING":
+        this.sendNotification("EXT_ALERT", { type: "warning", message: this.translate(payload) })
     }
   },
 
@@ -61,7 +64,7 @@ Module.register("EXT-Volume", {
   getCommands: function(commander) {
     commander.add({
       command: "volume",
-      description: "volume help to translate", //this.translate("VOLUME_HELP"),
+      description: this.translate("VolumeHelp"),
       callback: "tbVolume"
     })
   },
@@ -111,5 +114,18 @@ Module.register("EXT-Volume", {
         e.stopPropagation()
       }, {once: true})
     }, 3000)
-  }
+  },
+
+  getTranslations: function() {
+    return {
+      en: "translations/en.json",
+      fr: "translations/fr.json",
+      it: "translations/it.json",
+      de: "translations/de.json",
+      es: "translations/es.json",
+      nl: "translations/nl.json",
+      pt: "translations/pt.json",
+      ko: "translations/ko.json"
+    }
+  },
 })
