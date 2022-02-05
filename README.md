@@ -7,7 +7,7 @@ It allow to control the sound volume of MagicMirror
 This module is an Extented for `MMM-GoogleAssistant` v4.x, you can naturally use it as a simple module !
 
 ## Screenshot
-![](https://raw.githubusercontent.com/bugsounet/EXT-Volume/dev/screenshoot.png)
+![](https://raw.githubusercontent.com/bugsounet/EXT-Volume/dev/screenshot.png)
 
 ## Installation / update / configuration
 
