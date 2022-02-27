@@ -9,7 +9,7 @@ logNOTI = (...args) => { /* do nothing */ }
 
 Module.register("EXT-Volume", {
   defaults: {
-    debug: true,
+    debug: false,
     volumePreset: "PULSE",
     myScript: null
   },
@@ -31,7 +31,9 @@ Module.register("EXT-Volume", {
   },
 
   getDom: function() {
-
+    var dom = document.createElement("div")
+    dom.style.display = 'none'
+    return dom
   },
 
   notificationReceived: function(noti, payload) {
@@ -41,7 +43,7 @@ Module.register("EXT-Volume", {
         this.prepareVolume()
         this.sendNotification("EXT_HELLO", this.name)
         break
-      case "EXT_VOLUME_SET":
+      case "EXT_VOLUME-SET":
         this.sendSocketNotification("VOLUME_SET", payload)
         break
     }
