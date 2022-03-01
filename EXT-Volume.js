@@ -36,12 +36,14 @@ Module.register("EXT-Volume", {
     return dom
   },
 
-  notificationReceived: function(noti, payload) {
+  notificationReceived: function(noti, payload, sender) {
     switch(noti) {
       case "DOM_OBJECTS_CREATED":
         this.sendSocketNotification("INIT", this.config)
         this.prepareVolume()
-        this.sendNotification("EXT_HELLO", this.name)
+        break
+      case "GAv4_READY":
+        if (sender.name == "MMM-GoogleAssistant") this.sendNotification("EXT_HELLO", this.name)
         break
       case "EXT_VOLUME-SET":
         this.sendSocketNotification("VOLUME_SET", payload)
