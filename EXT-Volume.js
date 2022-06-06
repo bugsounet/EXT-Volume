@@ -11,7 +11,8 @@ Module.register("EXT-Volume", {
   defaults: {
     debug: false,
     volumePreset: "PULSE",
-    myScript: null
+    myScript: null,
+    startVolume: 100,
   },
 
   start: function () {
@@ -43,7 +44,10 @@ Module.register("EXT-Volume", {
         this.prepareVolume()
         break
       case "GAv4_READY":
-        if (sender.name == "MMM-GoogleAssistant") this.sendNotification("EXT_HELLO", this.name)
+        if (sender.name == "MMM-GoogleAssistant") {
+          this.sendNotification("EXT_HELLO", this.name)
+          this.sendSocketNotification("VOLUME_SET", this.config.startVolume)
+        }
         break
       case "EXT_VOLUME-SET":
         this.sendSocketNotification("VOLUME_SET", payload)
@@ -54,6 +58,7 @@ Module.register("EXT-Volume", {
   socketNotificationReceived: function(noti, payload) {
     switch(noti) {
       case "VOLUME_DONE":
+        this.sendNotification("EXT_VOLUME-GET", payload)
         this.drawVolume(payload)
         break
       case "WARNING":
