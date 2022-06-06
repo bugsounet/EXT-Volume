@@ -1,13 +1,13 @@
 {
   "name": "EXT-Volume",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "rev": "220227",
   "description": "An embedded volume notification displayer on MagicMirror.",
   "main": "EXT-Volume.js",
   "scripts": {
     "preinstall": "installer/preinstall.sh",
     "postinstall": "installer/postinstall.sh",
-    "update": "isntaller/update.sh"
+    "update": "installer/update.sh"
   },
   "keywords": [
     "magic mirror",
