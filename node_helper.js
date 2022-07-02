@@ -14,7 +14,8 @@ module.exports = NodeHelper.create({
       "HIFIBERRY-DAC": "amixer sset -M 'Digital' #VOLUME#%",
       "PULSE": "amixer set Master #VOLUME#% -q",
       "RESPEAKER_SPEAKER": "amixer -M sset Speaker #VOLUME#%",
-      "RESPEAKER_PLAYBACK": "amixer -M sset Playback #VOLUME#%"
+      "RESPEAKER_PLAYBACK": "amixer -M sset Playback #VOLUME#%",
+      "UBUNTU": "amixer -D pulse -M sset Master #VOLUME#%"
     }
     this.volumeDisabled = true
   },
