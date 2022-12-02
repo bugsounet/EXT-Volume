@@ -18,6 +18,7 @@ module.exports = NodeHelper.create({
       "UBUNTU": "amixer -D pulse -M sset Master #VOLUME#%"
     }
     this.volumeDisabled = true
+    this.lastLevel = 100
   },
 
   socketNotificationReceived: function (noti, payload) {
@@ -28,6 +29,12 @@ module.exports = NodeHelper.create({
       break
       case "VOLUME_SET":
         this.setVolume(payload)
+        break
+      case "VOLUME_UP":
+        this.upVolume()
+        break
+      case "VOLUME_DOWN":
+        this.downVolume()
         break
     }
   },
@@ -60,7 +67,20 @@ module.exports = NodeHelper.create({
       else {
         log("Set Volume To:", level)
         this.sendSocketNotification("VOLUME_DONE", level)
+        this.lastLevel = level
       }
     })
+  },
+
+  upVolume: function() {
+    var level = this.lastLevel + 5
+    if (level >= 100) level = 100
+    this.setVolume(level)
+  },
+
+  downVolume: function () {
+    var level = this.lastLevel - 5
+    if (level <= 0) level = 0
+    this.setVolume(level)
   }
 })

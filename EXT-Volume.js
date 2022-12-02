@@ -18,6 +18,7 @@ Module.register("EXT-Volume", {
   start: function () {
     if (this.config.debug) logNOTI = (...args) => { console.log("[VOLUME]", ...args) }
     this.config.volumeText = this.translate("VolumeText")
+    this.timerOut = null
   },
 
   getScripts: function() {
@@ -51,6 +52,12 @@ Module.register("EXT-Volume", {
         break
       case "EXT_VOLUME-SET":
         this.sendSocketNotification("VOLUME_SET", payload)
+        break
+      case "EXT_VOLUME-UP":
+        this.sendSocketNotification("VOLUME_UP")
+        break
+      case "EXT_VOLUME-DOWN":
+        this.sendSocketNotification("VOLUME_DOWN")
         break
     }
   },
@@ -106,6 +113,7 @@ Module.register("EXT-Volume", {
   },
 
   drawVolume (current) {
+    clearTimeout(this.timerOut)
     var volume = document.getElementById("EXT_VOLUME")
     volume.classList.remove("hidden", "animate__zoomOut")
     volume.classList.add("animate__zoomIn")
@@ -113,7 +121,7 @@ Module.register("EXT-Volume", {
     volumeText.innerHTML = this.config.volumeText + " " + current + "%"
     var volumeBar = document.getElementById("EXT_VOLUME_BAR")
     volumeBar.style.width = current + "%"
-    setTimeout(()=>{
+    this.timerOut = setTimeout(()=>{
       volume.classList.remove("animate__zoomIn")
       volume.classList.add("animate__zoomOut")
       volume.addEventListener('animationend', (e) => {
