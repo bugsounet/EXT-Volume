@@ -21,10 +21,13 @@ Module.register("EXT-Volume", {
     this.config.volumeText = this.translate("VolumeText")
     this.timerOutSpeaker = null
     this.timerOutRecorder = null
+    this.timerOutMuted = null
     if (this.config.startSpeakerVolume > 100) this.config.startSpeakerVolume = 100
     if (this.config.startSpeakerVolume < 0) this.config.startSpeakerVolume = 0
     if (this.config.startRecorderVolume > 100) this.config.startRecorderVolume = 100
     if (this.config.startRecorderVolume < 0) this.config.startRecorderVolume = 0
+    this.currentLevel = {}
+    this.oldLevel = {}
   },
 
   getScripts: function() {
@@ -81,12 +84,21 @@ Module.register("EXT-Volume", {
   socketNotificationReceived: function(noti, payload) {
     switch(noti) {
       case "VOLUMESPEAKER_DONE":
-        this.sendNotification("EXT_VOLUME-SPEAKER_GET", payload)
         this.drawVolumeSpeaker(payload)
         break
       case "VOLUMERECORDER_DONE":
-        this.sendNotification("EXT_VOLUME-RECORDER_GET", payload)
         this.drawVolumeRecorder(payload)
+        break
+      case "VOLUMESPEAKER_LEVEL":
+        this.sendNotification("EXT_VOLUME_GET", payload)
+        this.currentLevel = payload
+        if (this.currentLevel.SpeakerIsMuted == true) {
+          this.drawVolumeMuted()
+        }
+        if ((this.currentLevel.SpeakerIsMuted == false) && this.oldLevel.SpeakerIsMuted == true) {
+          this.drawVolumeSpeaker(this.currentLevel.Speaker)
+        }
+        this.oldLevel = payload
         break
       case "WARNING":
         this.sendNotification("EXT_ALERT", { type: "warning", message: this.translate(payload) })
@@ -108,6 +120,16 @@ Module.register("EXT-Volume", {
       description: "Set recorder volume",
       callback: "tbRecorder"
     })
+    commander.add({
+      command: "mute",
+      description: "Mute speaker",
+      callback: "tbMute"
+    })
+    commander.add({
+      command: "unmute",
+      description: "UnMute speaker",
+      callback: "tbUnMute"
+    })
   },
 
   tbVolume: function(command, handler) {
@@ -117,7 +139,7 @@ Module.register("EXT-Volume", {
       this.sendSocketNotification("VOLUMESPEAKER_SET", value)
       handler.reply("TEXT", "Speaker Volume " + value+"%")
     }
-    else handler.reply("TEXT", "/volume [0-100]")
+    else handler.reply("TEXT", "Speaker Volume " + this.currentLevel.Speaker + "%")
   },
 
   tbRecorder: function(command, handler) {
@@ -127,7 +149,19 @@ Module.register("EXT-Volume", {
       this.sendSocketNotification("VOLUMERECORDER_SET", value)
       handler.reply("TEXT", "Recorder Volume " + value+"%")
     }
-    else handler.reply("TEXT", "/record [0-100]")
+    else handler.reply("TEXT", "Recorder Volume " + this.currentLevel.Recorder +"%")
+  },
+
+  tbMute: function(command, handler) {
+    if (this.currentLevel.SpeakerIsMuted) return handler.reply("TEXT", "Speaker is already Muted")
+    this.sendSocketNotification("VOLUMESPEAKER_SET", "mute")
+    handler.reply("TEXT", "Speaker is now Muted")
+  },
+
+  tbUnMute: function(command, handler) {
+    if (!this.currentLevel.SpeakerIsMuted) return handler.reply("TEXT", "Speaker is already UnMuted")
+    this.sendSocketNotification("VOLUMESPEAKER_SET", "unmute")
+    handler.reply("TEXT", "Speaker is now UnMuted")
   },
 
   /** Volume display **/
@@ -172,6 +206,19 @@ Module.register("EXT-Volume", {
     recorderContainer.appendChild(volumeBar)
     document.body.appendChild(recorderContainer)
 
+    var muteContainer = document.createElement("div")
+    muteContainer.id = "EXT_VOLUME-MUTE"
+    muteContainer.classList.add("hidden")
+    muteContainer.className= "hidden animate__animated"
+    muteContainer.style.setProperty('--animate-duration', '1s')
+    var volumeIconContainer = document.createElement("div")
+    volumeIconContainer.id= "EXT_VOLUME-MUTE_CONTAINER_ICON"
+      var volumeIcon = document.createElement("img")
+      volumeIcon.id = "EXT_VOLUME-MUTE_ICON"
+      volumeIcon.src = "/modules/EXT-Volume/resources/mute.png"
+      volumeIconContainer.appendChild(volumeIcon)
+    muteContainer.appendChild(volumeIconContainer)
+    document.body.appendChild(muteContainer)
   },
 
   drawVolumeSpeaker (current) {
@@ -210,6 +257,23 @@ Module.register("EXT-Volume", {
       volume.addEventListener('animationend', (e) => {
         if (e.animationName == "flipOutX" && e.path[0].id == "EXT_VOLUME-RECORDER") {
           volume.classList.add("hidden")
+        }
+        e.stopPropagation()
+      }, {once: true})
+    }, 3000)
+  },
+
+  drawVolumeMuted() {
+    clearTimeout(this.timerOutMuted)
+    var mute = document.getElementById("EXT_VOLUME-MUTE")
+    mute.classList.remove("hidden", "animate__zoomOut")
+    mute.classList.add("animate__zoomIn")
+    this.timerOutMuted = setTimeout(()=>{
+      mute.classList.remove("animate__zoomIn")
+      mute.classList.add("animate__zoomOut")
+      mute.addEventListener('animationend', (e) => {
+        if (e.animationName == "flipOutX" && e.path[0].id == "EXT_VOLUME-MUTE") {
+          mute.classList.add("hidden")
         }
         e.stopPropagation()
       }, {once: true})

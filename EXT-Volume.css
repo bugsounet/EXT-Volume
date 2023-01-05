@@ -1,4 +1,22 @@
 /* Volume */
+
+#EXT_VOLUME-MUTE {
+  top: calc(70% - 180px);
+  left: calc(50% - 200px);
+  width: 400px;
+  position: fixed;
+  visibility: visible;
+  opacity: 1;
+  z-index: 1;
+}
+
+#EXT_VOLUME-MUTE_CONTAINER_ICON {
+  height: 100px;
+  width: fit-content;
+  display: flex;
+  margin: auto;
+}
+
 #EXT_VOLUME-SPEAKER {
   top: calc(70% - 20px);
   left: calc(50% - 200px);
@@ -71,6 +89,7 @@
   font-size: 24px;
 }
 
+#EXT_VOLUME-MUTE.hidden,
 #EXT_VOLUME-RECORDER.hidden,
 #EXT_VOLUME-SPEAKER.hidden {
   display:none;
