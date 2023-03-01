@@ -109,7 +109,7 @@ Module.register("EXT-Volume", {
   /*** TelegramBot Commands ***/
   /****************************/
 
-  getCommands: function(commander) {
+  EXT_TELBOTCommands: function(commander) {
     commander.add({
       command: "volume",
       description: this.translate("VolumeHelp"),
