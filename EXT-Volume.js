@@ -54,7 +54,7 @@ Module.register("EXT-Volume", {
         this.sendSocketNotification("INIT", this.config)
         this.prepareVolume()
         break
-      case "GAv4_READY":
+      case "GAv5_READY":
         if (sender.name == "MMM-GoogleAssistant") {
           this.sendNotification("EXT_HELLO", this.name)
           this.sendSocketNotification("INITIAL_VOLUME")
