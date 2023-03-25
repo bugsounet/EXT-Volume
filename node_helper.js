@@ -53,7 +53,6 @@ module.exports = NodeHelper.create({
   initialize: async function (config) {
     this.config = config
     if (this.config.debug) log = (...args) => { console.log("[VOLUME]", ...args) }
-    log(config)
     this.lastSpeakerLevel = this.config.startSpeakerVolume
     this.lastRecorderLevel = this.config.startRecorderVolume
   },
