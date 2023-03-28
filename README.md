@@ -1,10 +1,8 @@
-# MMM-Volume - Extented for `MMM-GoogleAssistant` v5.x
-
-EXT-Volume is a module for the [MagicMirror](https://github.com/MichMich/MagicMirror) project by [Michael Teeuw](https://github.com/MichMich).
+# EXT-Volume
 
 It allow to control the sound volume of MagicMirror
 
-This module is an Extented for `MMM-GoogleAssistant` v5.x, you can naturally use it as a simple module !
+This module is an Extented plugin for `MMM-GoogleAssistant`
 
 ## Screenshot
 ![](https://raw.githubusercontent.com/bugsounet/EXT-Volume/dev/screenshot.png)
