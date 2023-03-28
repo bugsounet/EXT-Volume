@@ -35,7 +35,6 @@ Module.register("EXT-Volume", {
   getStyles: function () {
     return [
       "EXT-Volume.css",
-      "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css",
       "https://cdn.materialdesignicons.com/5.2.45/css/materialdesignicons.min.css"
     ]
   },
