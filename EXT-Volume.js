@@ -1,7 +1,7 @@
 /**
  ** Module : EXT-Volume
  ** @bugsounet
- ** ©01-2022
+ ** ©03-2023
  ** support: https://forum.bugsounet.fr
  **/
 

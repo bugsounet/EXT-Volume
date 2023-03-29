@@ -2,7 +2,7 @@
 
 It allow to control the sound volume of MagicMirror
 
-This module is an Extented plugin for `MMM-GoogleAssistant`
+This plugin is an Extented plugin for `MMM-GoogleAssistant`
 
 ## Screenshot
 ![](https://raw.githubusercontent.com/bugsounet/EXT-Volume/dev/screenshot.png)
