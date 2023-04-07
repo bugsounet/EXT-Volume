@@ -76,9 +76,7 @@ class VolumeDisplayer {
       volume.classList.remove("animate__zoomIn")
       volume.classList.add("animate__zoomOut")
       volume.addEventListener('animationend', (e) => {
-        if (e.animationName == "flipOutX" && e.path[0].id == "EXT_VOLUME-SPEAKER") {
-          volume.classList.add("hidden")
-        }
+        if (e.animationName == "zoomOut") volume.classList.add("hidden")
         e.stopPropagation()
       }, {once: true})
     }, 3000)
@@ -97,9 +95,7 @@ class VolumeDisplayer {
       volume.classList.remove("animate__zoomIn")
       volume.classList.add("animate__zoomOut")
       volume.addEventListener('animationend', (e) => {
-        if (e.animationName == "flipOutX" && e.path[0].id == "EXT_VOLUME-RECORDER") {
-          volume.classList.add("hidden")
-        }
+        if (e.animationName == "zoomOut") volume.classList.add("hidden")
         e.stopPropagation()
       }, {once: true})
     }, 3000)
@@ -114,9 +110,7 @@ class VolumeDisplayer {
       mute.classList.remove("animate__zoomIn")
       mute.classList.add("animate__zoomOut")
       mute.addEventListener('animationend', (e) => {
-        if (e.animationName == "flipOutX" && e.path[0].id == "EXT_VOLUME-MUTE") {
-          mute.classList.add("hidden")
-        }
+        if (e.animationName == "zoomOut") mute.classList.add("hidden")
         e.stopPropagation()
       }, {once: true})
     }, 3000)
