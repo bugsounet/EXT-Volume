@@ -6,8 +6,11 @@ var log = (...args) => { /* do nothing */ }
 
 module.exports = NodeHelper.create({
   start: function () {
-    this.volumeSpeakerScript=  "amixer -D pulse -M sset Master #VOLUME#% -q"
+    this.volumeSpeakerScript =  "amixer -D pulse -M sset Master #VOLUME#% -q"
     this.volumeRecorderScript = "amixer -D pulse -M sset Capture #VOLUME#% -q"
+    this.checkVolumeScript = "amixer -D pulse sget Master | grep -E -o '[[:digit:]]+%' | head -n 1| sed 's/%//g'"
+    this.checkVolumeMuteScript = "amixer -D pulse sget Master | grep -E -o '[+[(on|off)]+]\n'| head -n 1 | head -c -1"
+    this.checkRecorderScript = "amixer -D pulse sget Capture | grep -E -o '[[:digit:]]+%' | head -n 1| sed 's/%//g'"
     this.level = {
       Speaker: 100,
       SpeakerIsMuted: false,
@@ -55,14 +58,14 @@ module.exports = NodeHelper.create({
     if (this.config.debug) log = (...args) => { console.log("[VOLUME]", ...args) }
     this.lastSpeakerLevel = this.config.startSpeakerVolume
     this.lastRecorderLevel = this.config.startRecorderVolume
+    if (this.config.syncVolume) this.timerCheck()
   },
 
   /** Volume control **/
   setVolumeSpeaker: function(level) {
-    var volumeScript= this.config.myScript ? this.config.myScript : this.volumeSpeakerScript
     var script
-    if (level == "mute" || level == "unmute") script = volumeScript.replace("#VOLUME#%", level)
-    else script = volumeScript.replace("#VOLUME#", level)
+    if (level == "mute" || level == "unmute") script = this.volumeSpeakerScript.replace("#VOLUME#%", level)
+    else script = this.volumeSpeakerScript.replace("#VOLUME#", level)
     exec (script, (err, stdout, stderr)=> {
       if (err) {
         console.error("[VOLUME] Set Volume Error:", err.toString())
@@ -96,8 +99,7 @@ module.exports = NodeHelper.create({
   },
   
   setVolumeRecorder: function(level) {
-    var volumeRecordScript= this.config.myRecorderScript ? this.config.myRecorderScript : this.volumeRecorderScript
-    var script = volumeRecordScript.replace("#VOLUME#", level)
+    var script = this.volumeRecorderScript.replace("#VOLUME#", level)
     exec (script, (err, stdout, stderr)=> {
       if (err) {
         console.error("[VOLUME] Set Record Volume Error:", err.toString())
@@ -122,5 +124,54 @@ module.exports = NodeHelper.create({
     var level = this.level.Recorder - 5
     if (level <= 0) level = 0
     this.setVolumeRecorder(level)
+  },
+
+  timerCheck: function() {
+    console.log("[VOLUME] SyncVolume Started")
+    setInterval(() => {
+      // check Volume
+      exec (this.checkVolumeScript, (err, stdout, stderr)=> {
+        if (err) {
+          console.error("[VOLUME] Get Volume Error:", err)
+        } else {
+          let volume = parseInt(stdout)
+          if (this.level.Speaker != volume) {
+            this.level.Speaker = volume
+            this.sendSocketNotification("VOLUMESPEAKER_DONE", volume)
+            this.sendSocketNotification("VOLUMESPEAKER_LEVEL", this.level)
+            log("Get Volume:", volume)
+          }
+        }
+      })
+      // check Volume Mute
+      exec (this.checkVolumeMuteScript, (err, stdout, stderr)=> {
+        if (err) {
+          console.error("[VOLUME] Get Volume Mute Error:", err)
+        } else {
+          let result = String(stdout)
+          let SpeakerIsMuted = (result == "[off]") ? true : false
+          if (this.level.SpeakerIsMuted != SpeakerIsMuted) {
+            this.level.SpeakerIsMuted = SpeakerIsMuted
+            this.sendSocketNotification("VOLUMESPEAKER_MUTE", SpeakerIsMuted)
+            this.sendSocketNotification("VOLUMESPEAKER_LEVEL", this.level)
+            log("Mute Volume:", SpeakerIsMuted)
+          }
+        }
+      })
+      // check Record
+      exec (this.checkRecorderScript, (err, stdout, stderr)=> {
+        if (err) {
+          console.error("[VOLUME] Get Record Error:", err)
+        } else {
+          let volume = parseInt(stdout)
+          if (this.level.Recorder != volume) {
+            this.level.Recorder = volume
+            this.sendSocketNotification("VOLUMERECORDER_DONE", volume)
+            this.sendSocketNotification("VOLUMESPEAKER_LEVEL", this.level)
+            log("Get Record:", volume)
+          }
+        }
+      })
+    }, 1000)
   }
 })
