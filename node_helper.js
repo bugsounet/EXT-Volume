@@ -8,9 +8,10 @@ module.exports = NodeHelper.create({
   start: function () {
     this.volumeSpeakerScript =  "amixer -D pulse -M sset Master #VOLUME#% -q"
     this.volumeRecorderScript = "amixer -D pulse -M sset Capture #VOLUME#% -q"
-    this.checkVolumeScript = "amixer -D pulse sget Master | grep -E -o '[[:digit:]]+%' | head -n 1| sed 's/%//g'"
-    this.checkVolumeMuteScript = "amixer -D pulse sget Master | grep -E -o '[+[(on|off)]+]\n'| head -n 1 | head -c -1"
-    this.checkRecorderScript = "amixer -D pulse sget Capture | grep -E -o '[[:digit:]]+%' | head -n 1| sed 's/%//g'"
+    this.checkVolumeScript = "amixer -D pulse sget Master"
+    this.checkRecorderScript = "amixer -D pulse sget Capture"
+    this.reInfoVolume = /[a-z][a-z ]*: Playback [0-9-]+ \[([0-9]+)%\] (?:[[0-9.-]+dB\] )?\[(on|off)\]/i
+    this.reInfoRecord = /[a-z][a-z ]*: Capture [0-9-]+ \[([0-9]+)%\] (?:[[0-9.-]+dB\] )?\[(on|off)\]/i
     this.level = {
       Speaker: 100,
       SpeakerIsMuted: false,
@@ -128,34 +129,31 @@ module.exports = NodeHelper.create({
 
   timerCheck: function() {
     console.log("[VOLUME] SyncVolume Started")
-    setInterval(() => {
+    setInterval(async () => {
       // check Volume
       exec (this.checkVolumeScript, (err, stdout, stderr)=> {
         if (err) {
           console.error("[VOLUME] Get Volume Error:", err)
         } else {
-          let volume = parseInt(stdout)
+          let change = 0
+          const result = this.reInfoVolume.exec(stdout)
+          if (!result[1] || !result[2]) console.error("[VOLUME] Get Volume Error: wrong array !?")
+          let volume = result[1]
+          let mute = result[2]
           if (this.level.Speaker != volume) {
             this.level.Speaker = volume
             this.sendSocketNotification("VOLUMESPEAKER_DONE", volume)
-            this.sendSocketNotification("VOLUMESPEAKER_LEVEL", this.level)
+            change = 1
             log("Get Volume:", volume)
           }
-        }
-      })
-      // check Volume Mute
-      exec (this.checkVolumeMuteScript, (err, stdout, stderr)=> {
-        if (err) {
-          console.error("[VOLUME] Get Volume Mute Error:", err)
-        } else {
-          let result = String(stdout)
-          let SpeakerIsMuted = (result == "[off]") ? true : false
+          let SpeakerIsMuted = (mute == "off") ? true : false
           if (this.level.SpeakerIsMuted != SpeakerIsMuted) {
             this.level.SpeakerIsMuted = SpeakerIsMuted
             this.sendSocketNotification("VOLUMESPEAKER_MUTE", SpeakerIsMuted)
-            this.sendSocketNotification("VOLUMESPEAKER_LEVEL", this.level)
+            change = 1
             log("Mute Volume:", SpeakerIsMuted)
           }
+          if (change) this.sendSocketNotification("VOLUMESPEAKER_LEVEL", this.level)
         }
       })
       // check Record
@@ -163,12 +161,14 @@ module.exports = NodeHelper.create({
         if (err) {
           console.error("[VOLUME] Get Record Error:", err)
         } else {
-          let volume = parseInt(stdout)
-          if (this.level.Recorder != volume) {
-            this.level.Recorder = volume
-            this.sendSocketNotification("VOLUMERECORDER_DONE", volume)
+          const result = this.reInfoRecord.exec(stdout)
+          if (!result[1]) console.error("[VOLUME] Get Record Error: wrong array !?")
+          let recordVolume = result[1]
+          if (this.level.Recorder != recordVolume) {
+            this.level.Recorder = recordVolume
+            this.sendSocketNotification("VOLUMERECORDER_DONE", recordVolume)
             this.sendSocketNotification("VOLUMESPEAKER_LEVEL", this.level)
-            log("Get Record:", volume)
+            log("Get Record:", recordVolume)
           }
         }
       })
