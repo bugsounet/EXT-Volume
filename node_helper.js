@@ -138,7 +138,7 @@ module.exports = NodeHelper.create({
           let change = 0
           const result = this.reInfoVolume.exec(stdout)
           if (!result[1] || !result[2]) console.error("[VOLUME] Get Volume Error: wrong array !?")
-          let volume = result[1]
+          let volume = parseInt(result[1])
           let mute = result[2]
           if (this.level.Speaker != volume) {
             this.level.Speaker = volume
@@ -163,7 +163,7 @@ module.exports = NodeHelper.create({
         } else {
           const result = this.reInfoRecord.exec(stdout)
           if (!result[1]) console.error("[VOLUME] Get Record Error: wrong array !?")
-          let recordVolume = result[1]
+          let recordVolume = parseInt(result[1])
           if (this.level.Recorder != recordVolume) {
             this.level.Recorder = recordVolume
             this.sendSocketNotification("VOLUMERECORDER_DONE", recordVolume)
