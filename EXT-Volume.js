@@ -1,7 +1,7 @@
 /**
  ** Module : EXT-Volume
  ** @bugsounet
- ** ©03-2023
+ ** ©04-2023
  ** support: https://forum.bugsounet.fr
  **/
 
@@ -10,10 +10,9 @@ logNOTI = (...args) => { /* do nothing */ }
 Module.register("EXT-Volume", {
   defaults: {
     debug: false,
-    mySpeakerScript: null,
     startSpeakerVolume: 100,
-    myRecorderScript: null,
     startRecorderVolume: 50,
+    syncVolume: false
   },
 
   start: function () {
