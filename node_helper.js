@@ -75,7 +75,6 @@ module.exports = NodeHelper.create({
       else {
         log("Set Speaker Volume To:", level)
         if (level == "mute" || level == "unmute") {
-          this.sendSocketNotification("VOLUMESPEAKER_MUTE", (level == "mute") ? true : false)
           this.level.SpeakerIsMuted = (level == "mute") ? true : false
         } else {
           this.sendSocketNotification("VOLUMESPEAKER_DONE", level)
@@ -129,7 +128,7 @@ module.exports = NodeHelper.create({
 
   timerCheck: function() {
     console.log("[VOLUME] SyncVolume Started")
-    setInterval(async () => {
+    setInterval(() => {
       // check Volume
       exec (this.checkVolumeScript, (err, stdout, stderr)=> {
         if (err) {
@@ -149,7 +148,6 @@ module.exports = NodeHelper.create({
           let SpeakerIsMuted = (mute == "off") ? true : false
           if (this.level.SpeakerIsMuted != SpeakerIsMuted) {
             this.level.SpeakerIsMuted = SpeakerIsMuted
-            this.sendSocketNotification("VOLUMESPEAKER_MUTE", SpeakerIsMuted)
             change = 1
             log("Mute Volume:", SpeakerIsMuted)
           }

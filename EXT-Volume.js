@@ -71,7 +71,9 @@ Module.register("EXT-Volume", {
     if (!this.ready) return
     switch(noti) {
       case "EXT_VOLUME-SPEAKER_SET":
-        this.sendSocketNotification("VOLUMESPEAKER_SET", payload)
+        let valueSPK = Number(payload)
+        if ((!valueSPK && valueSPK != 0) || ((valueSPK < 0) || (valueSPK > 100))) return
+        this.sendSocketNotification("VOLUMESPEAKER_SET", valueSPK)
         break
       case "EXT_VOLUME-SPEAKER_UP":
         this.sendSocketNotification("VOLUMESPEAKER_UP")
@@ -79,8 +81,16 @@ Module.register("EXT-Volume", {
       case "EXT_VOLUME-SPEAKER_DOWN":
         this.sendSocketNotification("VOLUMESPEAKER_DOWN")
         break
+      case "EXT_VOLUME-SPEAKER_MUTE":
+        this.sendSocketNotification("VOLUMESPEAKER_SET", "mute")
+        break
+      case "EXT_VOLUME-SPEAKER_UNMUTE":
+        this.sendSocketNotification("VOLUMESPEAKER_SET", "unmute")
+        break
       case "EXT_VOLUME-RECORDER_SET":
-        this.sendSocketNotification("VOLUMERECORDER_SET", payload)
+        let valueREC = Number(payload)
+        if ((!valueREC && valueREC != 0) || ((valueREC < 0) || (valueREC > 100))) return
+        this.sendSocketNotification("VOLUMERECORDER_SET", ValueREC)
         break
       case "EXT_VOLUME-RECORDER_UP":
         this.sendSocketNotification("VOLUMERECORDER_UP")
