@@ -82,10 +82,8 @@ Module.register("EXT-Volume", {
         this.sendSocketNotification("VOLUMESPEAKER_DOWN")
         break
       case "EXT_VOLUME-SPEAKER_MUTE":
-        this.sendSocketNotification("VOLUMESPEAKER_SET", "mute")
-        break
-      case "EXT_VOLUME-SPEAKER_UNMUTE":
-        this.sendSocketNotification("VOLUMESPEAKER_SET", "unmute")
+        if (payload) this.sendSocketNotification("VOLUMESPEAKER_SET", "mute")
+        else this.sendSocketNotification("VOLUMESPEAKER_SET", "unmute")
         break
       case "EXT_VOLUME-RECORDER_SET":
         let valueREC = Number(payload)
