@@ -5,8 +5,6 @@
  ** support: https://forum.bugsounet.fr
  **/
 
-logNOTI = (...args) => { /* do nothing */ }
-
 Module.register("EXT-Volume", {
   defaults: {
     debug: false,
@@ -16,7 +14,6 @@ Module.register("EXT-Volume", {
   },
 
   start: function () {
-    if (this.config.debug) logNOTI = (...args) => { console.log("[VOLUME]", ...args) }
     if (this.config.startSpeakerVolume > 100) this.config.startSpeakerVolume = 100
     if (this.config.startSpeakerVolume < 0) this.config.startSpeakerVolume = 0
     if (this.config.startRecorderVolume > 100) this.config.startRecorderVolume = 100
