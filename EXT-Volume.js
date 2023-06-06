@@ -85,7 +85,7 @@ Module.register("EXT-Volume", {
       case "EXT_VOLUME-RECORDER_SET":
         let valueREC = Number(payload)
         if ((!valueREC && valueREC != 0) || ((valueREC < 0) || (valueREC > 100))) return
-        this.sendSocketNotification("VOLUMERECORDER_SET", ValueREC)
+        this.sendSocketNotification("VOLUMERECORDER_SET", valueREC)
         break
       case "EXT_VOLUME-RECORDER_UP":
         this.sendSocketNotification("VOLUMERECORDER_UP")
