@@ -32,7 +32,7 @@
   },
   "homepage": "https://wiki.bugsounet.fr/en/EXT-Volume",
   "dependencies": {
-    "glob": "^10.3.1",
+    "glob": "^10.3.3",
     "minify": "^9.2.0"
   }
 }
