@@ -34,7 +34,6 @@ cd ..
 # module name
 Installer_module="$(grep -Eo '\"name\"[^,]*' ./package.json | grep -Eo '[^:]*$' | awk  -F'\"' '{print $2}')"
 
-
 # the end...
 Installer_warning "Support is now moved in a dedicated Server: https://forum.bugsounet.fr"
 Installer_warning "@bugsounet"
