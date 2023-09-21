@@ -1,7 +1,7 @@
 {
   "name": "EXT-Volume",
-  "version": "2.3.4",
-  "rev": "230723",
+  "version": "2.4.0",
+  "rev": "230921",
   "description": "An embedded volume notification displayer on MagicMirror.",
   "main": "EXT-Volume.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "GoogleAssistant"
   ],
   "engines": {
-    "node": ">=16.14.0"
+    "node": ">=18"
   },
   "author": "bugsounet",
   "license": "MIT",

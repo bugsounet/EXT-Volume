@@ -1,11 +1,13 @@
 /**
  ** Module : EXT-Volume
  ** @bugsounet
- ** ©04-2023
+ ** ©09-2023
  ** support: https://forum.bugsounet.fr
  **/
 
 Module.register("EXT-Volume", {
+  requiresVersion: "2.25.0",
+
   defaults: {
     debug: false,
     startSpeakerVolume: 100,
