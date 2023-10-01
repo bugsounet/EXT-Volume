@@ -1,11 +1,13 @@
 /**
  ** Module : EXT-Volume
  ** @bugsounet
- ** ©04-2023
+ ** ©09-2023
  ** support: https://forum.bugsounet.fr
  **/
 
 Module.register("EXT-Volume", {
+  requiresVersion: "2.25.0",
+
   defaults: {
     debug: false,
     startSpeakerVolume: 100,
@@ -46,7 +48,8 @@ Module.register("EXT-Volume", {
       pt: "translations/pt.json",
       ko: "translations/ko.json",
       el: "translations/el.json",
-      "zh-cn": "translations/zh-cn.json"
+      "zh-cn": "translations/zh-cn.json",
+      tr: "translations/tr.json"
     }
   },
 
