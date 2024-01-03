@@ -1,7 +1,7 @@
 {
   "name": "EXT-Volume",
-  "version": "2.4.0",
-  "rev": "231001",
+  "version": "2.5.0",
+  "rev": "240103",
   "description": "An embedded volume notification displayer on MagicMirror.",
   "main": "EXT-Volume.js",
   "scripts": {
@@ -32,7 +32,7 @@
   },
   "homepage": "https://wiki.bugsounet.fr/en/EXT-Volume",
   "dependencies": {
-    "esbuild": "^0.19.4",
+    "esbuild": "^0.19.11",
     "glob": "^10.3.10"
   }
 }
