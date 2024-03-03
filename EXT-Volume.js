@@ -15,29 +15,29 @@ Module.register("EXT-Volume", {
     syncVolume: false
   },
 
-  start: function () {
-    if (this.config.startSpeakerVolume > 100) this.config.startSpeakerVolume = 100
-    if (this.config.startSpeakerVolume < 0) this.config.startSpeakerVolume = 0
-    if (this.config.startRecorderVolume > 100) this.config.startRecorderVolume = 100
-    if (this.config.startRecorderVolume < 0) this.config.startRecorderVolume = 0
-    this.currentLevel = {}
-    this.oldLevel = {}
-    this.ready = false
-    this.VolumeDiplayer = new VolumeDisplayer(this.translate("VolumeText"))
+  start () {
+    if (this.config.startSpeakerVolume > 100) this.config.startSpeakerVolume = 100;
+    if (this.config.startSpeakerVolume < 0) this.config.startSpeakerVolume = 0;
+    if (this.config.startRecorderVolume > 100) this.config.startRecorderVolume = 100;
+    if (this.config.startRecorderVolume < 0) this.config.startRecorderVolume = 0;
+    this.currentLevel = {};
+    this.oldLevel = {};
+    this.ready = false;
+    this.VolumeDiplayer = new VolumeDisplayer(this.translate("VolumeText"));
   },
 
-  getScripts: function() {
-    return [ "/modules/EXT-Volume/components/VolumeDisplayer.js" ]
+  getScripts () {
+    return [ "/modules/EXT-Volume/components/VolumeDisplayer.js" ];
   },
 
-  getStyles: function () {
+  getStyles () {
     return [
       "EXT-Volume.css",
       "https://cdn.materialdesignicons.com/5.2.45/css/materialdesignicons.min.css"
-    ]
+    ];
   },
 
-  getTranslations: function() {
+  getTranslations () {
     return {
       en: "translations/en.json",
       fr: "translations/fr.json",
@@ -50,77 +50,77 @@ Module.register("EXT-Volume", {
       el: "translations/el.json",
       "zh-cn": "translations/zh-cn.json",
       tr: "translations/tr.json"
-    }
+    };
   },
 
-  getDom: function() {
-    var dom = document.createElement("div")
-    dom.style.display = 'none'
-    return dom
+  getDom () {
+    var dom = document.createElement("div");
+    dom.style.display = "none";
+    return dom;
   },
 
-  notificationReceived: function(noti, payload, sender) {
-    if (noti == "GA_READY") {
-      if (sender.name == "MMM-GoogleAssistant") {
-        this.sendSocketNotification("INIT", this.config)
-        this.VolumeDiplayer.prepare()
-        this.ready = true
-        this.sendNotification("EXT_HELLO", this.name)
-        this.sendSocketNotification("INITIAL_VOLUME")
+  notificationReceived (noti, payload, sender) {
+    if (noti === "GA_READY") {
+      if (sender.name === "MMM-GoogleAssistant") {
+        this.sendSocketNotification("INIT", this.config);
+        this.VolumeDiplayer.prepare();
+        this.ready = true;
+        this.sendNotification("EXT_HELLO", this.name);
+        this.sendSocketNotification("INITIAL_VOLUME");
       }
     }
-    if (!this.ready) return
+    if (!this.ready) return;
     switch(noti) {
       case "EXT_VOLUME-SPEAKER_SET":
-        let valueSPK = Number(payload)
-        if ((!valueSPK && valueSPK != 0) || ((valueSPK < 0) || (valueSPK > 100))) return
-        this.sendSocketNotification("VOLUMESPEAKER_SET", valueSPK)
-        break
+        let valueSPK = Number(payload);
+        if ((!valueSPK && valueSPK !== 0) || ((valueSPK < 0) || (valueSPK > 100))) return;
+        this.sendSocketNotification("VOLUMESPEAKER_SET", valueSPK);
+        break;
       case "EXT_VOLUME-SPEAKER_UP":
-        this.sendSocketNotification("VOLUMESPEAKER_UP")
-        break
+        this.sendSocketNotification("VOLUMESPEAKER_UP");
+        break;
       case "EXT_VOLUME-SPEAKER_DOWN":
-        this.sendSocketNotification("VOLUMESPEAKER_DOWN")
-        break
+        this.sendSocketNotification("VOLUMESPEAKER_DOWN");
+        break;
       case "EXT_VOLUME-SPEAKER_MUTE":
-        if (payload) this.sendSocketNotification("VOLUMESPEAKER_SET", "mute")
-        else this.sendSocketNotification("VOLUMESPEAKER_SET", "unmute")
-        break
+        if (payload) this.sendSocketNotification("VOLUMESPEAKER_SET", "mute");
+        else this.sendSocketNotification("VOLUMESPEAKER_SET", "unmute");
+        break;
       case "EXT_VOLUME-RECORDER_SET":
-        let valueREC = Number(payload)
-        if ((!valueREC && valueREC != 0) || ((valueREC < 0) || (valueREC > 100))) return
-        this.sendSocketNotification("VOLUMERECORDER_SET", valueREC)
-        break
+        let valueREC = Number(payload);
+        if ((!valueREC && valueREC !== 0) || ((valueREC < 0) || (valueREC > 100))) return;
+        this.sendSocketNotification("VOLUMERECORDER_SET", valueREC);
+        break;
       case "EXT_VOLUME-RECORDER_UP":
-        this.sendSocketNotification("VOLUMERECORDER_UP")
-        break
+        this.sendSocketNotification("VOLUMERECORDER_UP");
+        break;
       case "EXT_VOLUME-RECORDER_DOWN":
-        this.sendSocketNotification("VOLUMERECORDER_DOWN")
-        break
+        this.sendSocketNotification("VOLUMERECORDER_DOWN");
+        break;
     }
   },
 
-  socketNotificationReceived: function(noti, payload) {
+  socketNotificationReceived (noti, payload) {
     switch(noti) {
       case "VOLUMESPEAKER_DONE":
-        this.VolumeDiplayer.drawVolumeSpeaker(payload)
-        break
+        this.VolumeDiplayer.drawVolumeSpeaker(payload);
+        break;
       case "VOLUMERECORDER_DONE":
-        this.VolumeDiplayer.drawVolumeRecorder(payload)
-        break
+        this.VolumeDiplayer.drawVolumeRecorder(payload);
+        break;
       case "VOLUMESPEAKER_LEVEL":
-        this.sendNotification("EXT_VOLUME_GET", payload)
-        this.currentLevel = payload
-        if (this.currentLevel.SpeakerIsMuted == true) {
-          this.VolumeDiplayer.drawVolumeMuted()
+        this.sendNotification("EXT_VOLUME_GET", payload);
+        this.currentLevel = payload;
+        if (this.currentLevel.SpeakerIsMuted === true) {
+          this.VolumeDiplayer.drawVolumeMuted();
         }
-        if ((this.currentLevel.SpeakerIsMuted == false) && this.oldLevel.SpeakerIsMuted == true) {
-          this.VolumeDiplayer.drawVolumeSpeaker(this.currentLevel.Speaker)
+        if ((this.currentLevel.SpeakerIsMuted === false) && this.oldLevel.SpeakerIsMuted === true) {
+          this.VolumeDiplayer.drawVolumeSpeaker(this.currentLevel.Speaker);
         }
-        this.oldLevel = payload
-        break
+        this.oldLevel = payload;
+        break;
       case "WARNING":
-        this.sendNotification("EXT_ALERT", { type: "warning", message: this.translate(payload) })
+        this.sendNotification("EXT_ALERT", { type: "warning", message: this.translate(payload) });
     }
   },
 
@@ -128,58 +128,58 @@ Module.register("EXT-Volume", {
   /*** TelegramBot Commands ***/
   /****************************/
 
-  EXT_TELBOTCommands: function(commander) {
+  EXT_TELBOTCommands (commander) {
     commander.add({
       command: "volume",
       description: this.translate("VolumeHelp"),
       callback: "tbVolume"
-    })
+    });
     commander.add({
       command: "record",
       description: "Set recorder volume",
       callback: "tbRecorder"
-    })
+    });
     commander.add({
       command: "mute",
       description: "Mute speaker",
       callback: "tbMute"
-    })
+    });
     commander.add({
       command: "unmute",
       description: "UnMute speaker",
       callback: "tbUnMute"
-    })
+    });
   },
 
-  tbVolume: function(command, handler) {
+  tbVolume (command, handler) {
     if (handler.args) {
-      var value = Number(handler.args)
-      if ((!value && value != 0) || ((value < 0) || (value > 100))) return handler.reply("TEXT", "/volume [0-100]")
-      this.sendSocketNotification("VOLUMESPEAKER_SET", value)
-      handler.reply("TEXT", "Speaker Volume " + value+"%")
+      var value = Number(handler.args);
+      if ((!value && value !== 0) || ((value < 0) || (value > 100))) return handler.reply("TEXT", "/volume [0-100]");
+      this.sendSocketNotification("VOLUMESPEAKER_SET", value);
+      handler.reply("TEXT", `Speaker Volume ${  value}%`);
     }
-    else handler.reply("TEXT", "Speaker Volume " + this.currentLevel.Speaker + "%")
+    else handler.reply("TEXT", `Speaker Volume ${  this.currentLevel.Speaker  }%`);
   },
 
-  tbRecorder: function(command, handler) {
+  tbRecorder (command, handler) {
     if (handler.args) {
-      var value = Number(handler.args)
-      if ((!value && value != 0) || ((value < 0) || (value > 100))) return handler.reply("TEXT", "/volume [0-100]")
-      this.sendSocketNotification("VOLUMERECORDER_SET", value)
-      handler.reply("TEXT", "Recorder Volume " + value+"%")
+      var value = Number(handler.args);
+      if ((!value && value !== 0) || ((value < 0) || (value > 100))) return handler.reply("TEXT", "/volume [0-100]");
+      this.sendSocketNotification("VOLUMERECORDER_SET", value);
+      handler.reply("TEXT", `Recorder Volume ${  value}%`);
     }
-    else handler.reply("TEXT", "Recorder Volume " + this.currentLevel.Recorder +"%")
+    else handler.reply("TEXT", `Recorder Volume ${  this.currentLevel.Recorder }%`);
   },
 
-  tbMute: function(command, handler) {
-    if (this.currentLevel.SpeakerIsMuted) return handler.reply("TEXT", "Speaker is already Muted")
-    this.sendSocketNotification("VOLUMESPEAKER_SET", "mute")
-    handler.reply("TEXT", "Speaker is now Muted")
+  tbMute (command, handler) {
+    if (this.currentLevel.SpeakerIsMuted) return handler.reply("TEXT", "Speaker is already Muted");
+    this.sendSocketNotification("VOLUMESPEAKER_SET", "mute");
+    handler.reply("TEXT", "Speaker is now Muted");
   },
 
-  tbUnMute: function(command, handler) {
-    if (!this.currentLevel.SpeakerIsMuted) return handler.reply("TEXT", "Speaker is already UnMuted")
-    this.sendSocketNotification("VOLUMESPEAKER_SET", "unmute")
-    handler.reply("TEXT", "Speaker is now UnMuted")
+  tbUnMute (command, handler) {
+    if (!this.currentLevel.SpeakerIsMuted) return handler.reply("TEXT", "Speaker is already UnMuted");
+    this.sendSocketNotification("VOLUMESPEAKER_SET", "unmute");
+    handler.reply("TEXT", "Speaker is now UnMuted");
   }
-})
+});
