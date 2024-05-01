@@ -40,6 +40,9 @@ module.exports = NodeHelper.create({
       case "VOLUMESPEAKER_UP":
         this.upVolumeSpeaker();
         break;
+      case "VOLUMESPEAKER_MUTE_TOGGLE":
+        this.muteVolumeToggle();
+        break;
       case "VOLUMESPEAKER_DOWN":
         this.downVolumeSpeaker();
         break;
@@ -85,6 +88,10 @@ module.exports = NodeHelper.create({
         log("Speaker is now", this.level);
       }
     });
+  },
+
+  muteVolumeToggle () {
+    this.setVolumeSpeaker(this.level.SpeakerIsMuted ? "unmute" : "mute")
   },
 
   upVolumeSpeaker () {

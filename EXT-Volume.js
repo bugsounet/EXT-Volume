@@ -86,6 +86,9 @@ Module.register("EXT-Volume", {
         if (payload) this.sendSocketNotification("VOLUMESPEAKER_SET", "mute");
         else this.sendSocketNotification("VOLUMESPEAKER_SET", "unmute");
         break;
+      case "EXT_VOLUME-SPEAKER_MUTE_TOGGLE":
+        this.sendSocketNotification("VOLUMESPEAKER_MUTE_TOGGLE");
+        break;
       case "EXT_VOLUME-RECORDER_SET":
         let valueREC = Number(payload);
         if ((!valueREC && valueREC !== 0) || ((valueREC < 0) || (valueREC > 100))) return;
