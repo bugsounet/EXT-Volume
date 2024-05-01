@@ -91,7 +91,7 @@ module.exports = NodeHelper.create({
   },
 
   muteVolumeToggle () {
-    this.setVolumeSpeaker(this.level.SpeakerIsMuted ? "unmute" : "mute")
+    this.setVolumeSpeaker(this.level.SpeakerIsMuted ? "unmute" : "mute");
   },
 
   upVolumeSpeaker () {
