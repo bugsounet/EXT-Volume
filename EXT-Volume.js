@@ -123,7 +123,7 @@ Module.register("EXT-Volume", {
         this.oldLevel = payload;
         break;
       case "WARNING":
-        this.sendNotification("EXT_ALERT", { type: "warning", message: this.translate(payload) });
+        this.sendNotification("GA_ALERT", { type: "warning", message: this.translate(payload) });
     }
   },
 
