@@ -1,3 +1,6 @@
+/* global addAnimateCSS, removeAnimateCSS */
+
+/* eslint-disable-next-line */
 class VolumeDisplayer {
   constructor (text) {
     this.volumeText = text;
@@ -18,7 +21,7 @@ class VolumeDisplayer {
     volumeContainer.id = "EXT_VOLUME-SPEAKER";
     volumeContainer.classList.add("hidden");
     var volumeIconContainer = document.createElement("div");
-    volumeIconContainer.id= "EXT_VOLUME-SPEAKER_CONTAINER_ICON";
+    volumeIconContainer.id = "EXT_VOLUME-SPEAKER_CONTAINER_ICON";
     var volumeIcon = document.createElement("div");
     volumeIcon.id = "EXT_VOLUME-SPEAKER_ICON";
     volumeIcon.className = "mdi mdi-volume-high";
@@ -36,7 +39,7 @@ class VolumeDisplayer {
     recorderContainer.id = "EXT_VOLUME-RECORDER";
     recorderContainer.classList.add("hidden");
     var recorderIconContainer = document.createElement("div");
-    recorderIconContainer.id= "EXT_VOLUME-RECODER_CONTAINER_ICON";
+    recorderIconContainer.id = "EXT_VOLUME-RECODER_CONTAINER_ICON";
     var recorderIcon = document.createElement("div");
     recorderIcon.id = "EXT_VOLUME-RECORDER_ICON";
     recorderIcon.className = "mdi mdi-microphone";
@@ -54,7 +57,7 @@ class VolumeDisplayer {
     muteContainer.id = "EXT_VOLUME-MUTE";
     muteContainer.classList.add("hidden");
     var muteIconContainer = document.createElement("div");
-    muteIconContainer.id= "EXT_VOLUME-MUTE_CONTAINER_ICON";
+    muteIconContainer.id = "EXT_VOLUME-MUTE_CONTAINER_ICON";
     var muteIcon = document.createElement("img");
     muteIcon.id = "EXT_VOLUME-MUTE_ICON";
     muteIcon.src = "/modules/EXT-Volume/resources/mute.png";
@@ -69,19 +72,19 @@ class VolumeDisplayer {
     var volume = document.getElementById("EXT_VOLUME-SPEAKER");
     volume.classList.remove("hidden");
     removeAnimateCSS("EXT_VOLUME-SPEAKER", "zoomOut");
-    addAnimateCSS("EXT_VOLUME-SPEAKER", "zoomIn",1);
+    addAnimateCSS("EXT_VOLUME-SPEAKER", "zoomIn", 1);
 
     var volumeText = document.getElementById("EXT_VOLUME-SPEAKER_TEXT");
-    volumeText.innerHTML = `${this.volumeText  } ${  current  }%`;
+    volumeText.innerHTML = `${this.volumeText} ${current}%`;
     var volumeBar = document.getElementById("EXT_VOLUME-SPEAKER_BAR");
-    volumeBar.style.width = `${current  }%`;
-    this.timerOutSpeaker = setTimeout(()=>{
+    volumeBar.style.width = `${current}%`;
+    this.timerOutSpeaker = setTimeout(() => {
       removeAnimateCSS("EXT_VOLUME-SPEAKER", "zoomIn");
-      addAnimateCSS("EXT_VOLUME-SPEAKER", "zoomOut",1);
+      addAnimateCSS("EXT_VOLUME-SPEAKER", "zoomOut", 1);
       this.timerOutSpeakerHide = setTimeout(() => {
         volume.classList.add("hidden");
         removeAnimateCSS("EXT_VOLUME-SPEAKER", "zoomOut");
-      },1000);
+      }, 1000);
     }, 3000);
   }
 
@@ -91,18 +94,18 @@ class VolumeDisplayer {
     var recorder = document.getElementById("EXT_VOLUME-RECORDER");
     recorder.classList.remove("hidden");
     removeAnimateCSS("EXT_VOLUME-RECORDER", "zoomOut");
-    addAnimateCSS("EXT_VOLUME-RECORDER", "zoomIn",1);
+    addAnimateCSS("EXT_VOLUME-RECORDER", "zoomIn", 1);
     var recorderText = document.getElementById("EXT_VOLUME-RECORDER_TEXT");
-    recorderText.innerHTML = `${this.volumeText  } ${  current  }%`;
+    recorderText.innerHTML = `${this.volumeText} ${current}%`;
     var recorderBar = document.getElementById("EXT_VOLUME-RECORDER_BAR");
-    recorderBar.style.width = `${current  }%`;
-    this.timerOutRecorder = setTimeout(()=>{
+    recorderBar.style.width = `${current}%`;
+    this.timerOutRecorder = setTimeout(() => {
       removeAnimateCSS("EXT_VOLUME-RECORDER", "zoomIn");
-      addAnimateCSS("EXT_VOLUME-RECORDER", "zoomOut",1);
+      addAnimateCSS("EXT_VOLUME-RECORDER", "zoomOut", 1);
       this.timerOutRecorderHide = setTimeout(() => {
         recorder.classList.add("hidden");
         removeAnimateCSS("EXT_VOLUME-RECORDER", "zoomOut");
-      },1000);
+      }, 1000);
     }, 3000);
   }
 
@@ -112,14 +115,14 @@ class VolumeDisplayer {
     var mute = document.getElementById("EXT_VOLUME-MUTE");
     mute.classList.remove("hidden");
     removeAnimateCSS("EXT_VOLUME-MUTE", "zoomOut");
-    addAnimateCSS("EXT_VOLUME-MUTE", "zoomIn",1);
-    this.timerOutMuted = setTimeout(()=>{
+    addAnimateCSS("EXT_VOLUME-MUTE", "zoomIn", 1);
+    this.timerOutMuted = setTimeout(() => {
       removeAnimateCSS("EXT_VOLUME-MUTE", "zoomIn");
-      addAnimateCSS("EXT_VOLUME-MUTE", "zoomOut",1);
+      addAnimateCSS("EXT_VOLUME-MUTE", "zoomOut", 1);
       this.timerOutMutedHide = setTimeout(() => {
         mute.classList.add("hidden");
         removeAnimateCSS("EXT_VOLUME-MUTE", "zoomOut");
-      },1000);
+      }, 1000);
     }, 3000);
   }
 }
