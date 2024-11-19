@@ -2,12 +2,12 @@
 
 const exec = require("child_process").exec;
 
-var log = (...args) => { /* do nothing */ };
+var log = () => { /* do nothing */ };
 var NodeHelper = require("node_helper");
 
 module.exports = NodeHelper.create({
   start () {
-    this.volumeSpeakerScript =  "amixer -D pulse -M sset Master #VOLUME#% -q";
+    this.volumeSpeakerScript = "amixer -D pulse -M sset Master #VOLUME#% -q";
     this.volumeRecorderScript = "amixer -D pulse -M sset Capture #VOLUME#% -q";
     this.checkVolumeScript = "amixer -D pulse sget Master";
     this.checkRecorderScript = "amixer -D pulse sget Capture";
@@ -71,10 +71,10 @@ module.exports = NodeHelper.create({
     var script;
     if (level === "mute" || level === "unmute") script = this.volumeSpeakerScript.replace("#VOLUME#%", level);
     else script = this.volumeSpeakerScript.replace("#VOLUME#", level);
-    exec (script, (err, stdout, stderr)=> {
+    exec(script, (err) => {
       if (err) {
         console.error("[VOLUME] Set Volume Error:", err.toString());
-        this.sendSocketNotification("WARNING" , "VolumePresetError");
+        this.sendSocketNotification("WARNING", "VolumePresetError");
       }
       else {
         log("Set Speaker Volume To:", level);
@@ -105,13 +105,13 @@ module.exports = NodeHelper.create({
     if (level <= 0) level = 0;
     this.setVolumeSpeaker(level);
   },
-  
+
   setVolumeRecorder (level) {
     var script = this.volumeRecorderScript.replace("#VOLUME#", level);
-    exec (script, (err, stdout, stderr)=> {
+    exec(script, (err) => {
       if (err) {
         console.error("[VOLUME] Set Record Volume Error:", err.toString());
-        this.sendSocketNotification("WARNING" , "VolumeRecordPresetError");
+        this.sendSocketNotification("WARNING", "VolumeRecordPresetError");
       }
       else {
         log("Set Recorder Volume To:", level);
@@ -138,7 +138,7 @@ module.exports = NodeHelper.create({
     console.log("[VOLUME] SyncVolume Started");
     setInterval(() => {
       // check Volume
-      exec (this.checkVolumeScript, (err, stdout, stderr)=> {
+      exec(this.checkVolumeScript, (err, stdout) => {
         if (err) {
           console.error("[VOLUME] Get Volume Error:", err);
         } else {
@@ -163,7 +163,7 @@ module.exports = NodeHelper.create({
         }
       });
       // check Record
-      exec (this.checkRecorderScript, (err, stdout, stderr)=> {
+      exec(this.checkRecorderScript, (err, stdout) => {
         if (err) {
           console.error("[VOLUME] Get Record Error:", err);
         } else {

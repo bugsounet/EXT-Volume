@@ -5,6 +5,8 @@
  ** support: https://forum.bugsounet.fr
  **/
 
+/* global VolumeDisplayer */
+
 Module.register("EXT-Volume", {
   requiresVersion: "2.25.0",
 
@@ -27,7 +29,7 @@ Module.register("EXT-Volume", {
   },
 
   getScripts () {
-    return [ "/modules/EXT-Volume/components/VolumeDisplayer.js" ];
+    return ["/modules/EXT-Volume/components/VolumeDisplayer.js"];
   },
 
   getStyles () {
@@ -70,9 +72,9 @@ Module.register("EXT-Volume", {
       }
     }
     if (!this.ready) return;
-    switch(noti) {
+    switch (noti) {
       case "EXT_VOLUME-SPEAKER_SET":
-        let valueSPK = Number(payload);
+        var valueSPK = Number(payload);
         if ((!valueSPK && valueSPK !== 0) || ((valueSPK < 0) || (valueSPK > 100))) return;
         this.sendSocketNotification("VOLUMESPEAKER_SET", valueSPK);
         break;
@@ -90,7 +92,7 @@ Module.register("EXT-Volume", {
         this.sendSocketNotification("VOLUMESPEAKER_MUTE_TOGGLE");
         break;
       case "EXT_VOLUME-RECORDER_SET":
-        let valueREC = Number(payload);
+        var valueREC = Number(payload);
         if ((!valueREC && valueREC !== 0) || ((valueREC < 0) || (valueREC > 100))) return;
         this.sendSocketNotification("VOLUMERECORDER_SET", valueREC);
         break;
@@ -104,7 +106,7 @@ Module.register("EXT-Volume", {
   },
 
   socketNotificationReceived (noti, payload) {
-    switch(noti) {
+    switch (noti) {
       case "VOLUMESPEAKER_DONE":
         this.VolumeDiplayer.drawVolumeSpeaker(payload);
         break;
@@ -159,9 +161,9 @@ Module.register("EXT-Volume", {
       var value = Number(handler.args);
       if ((!value && value !== 0) || ((value < 0) || (value > 100))) return handler.reply("TEXT", "/volume [0-100]");
       this.sendSocketNotification("VOLUMESPEAKER_SET", value);
-      handler.reply("TEXT", `Speaker Volume ${  value}%`);
+      handler.reply("TEXT", `Speaker Volume ${value}%`);
     }
-    else handler.reply("TEXT", `Speaker Volume ${  this.currentLevel.Speaker  }%`);
+    else handler.reply("TEXT", `Speaker Volume ${this.currentLevel.Speaker}%`);
   },
 
   tbRecorder (command, handler) {
@@ -169,9 +171,9 @@ Module.register("EXT-Volume", {
       var value = Number(handler.args);
       if ((!value && value !== 0) || ((value < 0) || (value > 100))) return handler.reply("TEXT", "/volume [0-100]");
       this.sendSocketNotification("VOLUMERECORDER_SET", value);
-      handler.reply("TEXT", `Recorder Volume ${  value}%`);
+      handler.reply("TEXT", `Recorder Volume ${value}%`);
     }
-    else handler.reply("TEXT", `Recorder Volume ${  this.currentLevel.Recorder }%`);
+    else handler.reply("TEXT", `Recorder Volume ${this.currentLevel.Recorder}%`);
   },
 
   tbMute (command, handler) {
